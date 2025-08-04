@@ -6,6 +6,7 @@ import torch
 from model.resnet import ResNet18Model
 from utils.misc import load_config
 
+
 def test_model():
     config = load_config("config/moco_config.yaml")
     model = ResNet18Model(config)
@@ -13,6 +14,7 @@ def test_model():
     x = torch.randn(B, C, H, W)
     out = model(x)
     assert out.shape == (B, 128)
+
 
 if __name__ == "__main__":
     print("All tests passed!")

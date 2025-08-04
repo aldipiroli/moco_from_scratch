@@ -1,10 +1,11 @@
 import argparse
 
 from dataset.voc_dataset import VOCDataset
-from moco.model.base_loss import BaseLoss
 from model.resnet import ResNet18Model
 from utils.misc import get_logger, load_config, make_artifacts_dirs
 from utils.trainer import Trainer
+
+from moco.model.base_loss import BaseLoss
 
 
 def train(args):

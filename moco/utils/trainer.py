@@ -1,4 +1,3 @@
-import torch
 from tqdm import tqdm
 from utils.trainer_base import TrainerBase
 

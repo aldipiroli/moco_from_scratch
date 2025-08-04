@@ -2,10 +2,6 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 
-import torch
-import torch.nn as nn
-import torchvision.models as models
-
 
 class ResNet18Backbone(nn.Module):
     def __init__(self, pretrained=False, normalize_output=True):

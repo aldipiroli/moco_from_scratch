@@ -8,7 +8,7 @@ from utils.misc import load_config
 
 
 def test_model():
-    config = load_config("config/moco_config.yaml")
+    config = load_config("moco/config/moco_config.yaml")
     model = ResNet18Model(config)
     B, C, H, W = 2, 3, 512, 512
     x = torch.randn(B, C, H, W)

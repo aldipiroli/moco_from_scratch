@@ -2,6 +2,7 @@ ARTIFACTS_DIR: "../artifacts"
 MODEL:
   img_size: [512, 512, 3]
   scale_factor: 4
+  disable_bn: true
 DATA:
   batch_size: 8
   n_classes: 20

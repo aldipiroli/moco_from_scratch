@@ -52,10 +52,22 @@ class ResNet18Model(nn.Module):
         super().__init__()
         self.config = config
         self.backbone = ResNet18Backbone()
+        if self.config["MODEL"]["disable_bn"]:
+            self.backbone = replace_batchnorm_with_identity(self.backbone)
 
     def forward(self, img):
         out = self.backbone(img)
         return out
+
+
+def replace_batchnorm_with_identity(model):
+    for name, module in model.named_modules():
+        if isinstance(module, (nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d)):
+            parent_name = ".".join(name.split(".")[:-1])
+            attr_name = name.split(".")[-1]
+            parent = model.get_submodule(parent_name) if parent_name else model
+            setattr(parent, attr_name, nn.Identity())
+    return model
 
 
 if __name__ == "__main__":

@@ -1,11 +1,10 @@
 import argparse
 
-from dataset.voc_dataset import VOCDataset
+from dataset.flowers102_dataset import Flowers102Dataset
+from model.moco_loss import MoCoLoss
 from model.resnet import ResNet18Model
 from utils.misc import get_logger, load_config, make_artifacts_dirs
 from utils.trainer import Trainer
-
-from moco.model.base_loss import BaseLoss
 
 
 def train(args):
@@ -14,15 +13,15 @@ def train(args):
     logger = get_logger(config["LOG_DIR"])
     trainer = Trainer(config, logger)
 
-    train_dataset = VOCDataset(cfg=config, mode="train")
-    val_dataset = VOCDataset(cfg=config, mode="val")
+    train_dataset = Flowers102Dataset(cfg=config, mode="train")
+    val_dataset = Flowers102Dataset(cfg=config, mode="val")
 
     model = ResNet18Model(config)
     trainer.set_model(model)
 
     trainer.set_dataset(train_dataset, val_dataset, data_config=config["DATA"])
     trainer.set_optimizer(optim_config=config["OPTIM"])
-    trainer.set_loss_function(BaseLoss(config))
+    trainer.set_loss_function(MoCoLoss(config, logger))
 
     trainer.train()
 

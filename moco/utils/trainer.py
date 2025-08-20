@@ -1,3 +1,5 @@
+import copy
+
 from tqdm import tqdm
 from utils.trainer_base import TrainerBase
 
@@ -11,6 +13,8 @@ class Trainer(TrainerBase):
 
     def train(self):
         self.logger.info("Started training..")
+        self.initialize_encoders()
+
         start_epoch = self.epoch
         for epoch in range(start_epoch, self.config["OPTIM"]["num_epochs"]):
             self.epoch = epoch
@@ -40,3 +44,10 @@ class Trainer(TrainerBase):
                 }
             )
         pbar.close()
+
+    def initialize_encoders(self):
+        self.f_k = copy.deepcopy(self.model)
+        self.f_q = copy.deepcopy(self.model)
+
+    def evaluate_model(self):
+        return

@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 import torch
-from dataset.voc_dataset import custom_collate_fn
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from utils.misc import get_device
@@ -97,14 +96,11 @@ class TrainerBase(ABC):
         self.val_dataset = val_dataset
         self.data_config = data_config
 
-        self.train_loader = DataLoader(
-            self.train_dataset, batch_size=data_config["batch_size"], shuffle=True, collate_fn=custom_collate_fn
-        )
+        self.train_loader = DataLoader(self.train_dataset, batch_size=data_config["batch_size"], shuffle=True)
         self.val_loader = DataLoader(
             self.val_dataset,
             batch_size=val_set_batch_size if val_set_batch_size is not None else data_config["batch_size"],
             shuffle=shuffle_valset,
-            collate_fn=custom_collate_fn,
         )
         self.logger.info(f"Train Dataset: {self.train_dataset}")
         self.logger.info(f"Val Dataset: {self.val_dataset}")

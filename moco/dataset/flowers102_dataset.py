@@ -32,4 +32,4 @@ class Flowers102Dataset(Dataset):
         img, label = self.dataset[idx]
         img = self.transform_resize(img)
         img = self.transform_to_tensor(img)
-        return img, label
+        return img

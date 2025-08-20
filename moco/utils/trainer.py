@@ -113,12 +113,3 @@ class Trainer(TrainerBase):
 
     def evaluate_model(self):
         return
-
-
-###########################################
-import debugpy
-
-debugpy.listen(("localhost", 6001))
-print("Waiting for debugger attach...")
-debugpy.wait_for_client()
-###########################################

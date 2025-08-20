@@ -114,6 +114,8 @@ class TrainerBase(ABC):
             self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.optim_config["lr"])
         elif self.optim_config["optimizer"] == "Adam":
             self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.optim_config["lr"], weight_decay=0)
+        elif self.optim_config["optimizer"] == "SGD":
+            self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.optim_config["lr"], weight_decay=0)
         else:
             raise ValueError("Unknown optimizer")
         if self.optim_config["scheduler"] == "cosine":

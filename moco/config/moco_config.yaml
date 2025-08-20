@@ -15,7 +15,7 @@ DATA:
     crop_size: [256, 256]
 OPTIM:
   loss: ""
-  optimizer: "AdamW"
+  optimizer: "SGD"
   lr: 0.001
   accumulate_gradient: False
   accumulate_gradient_iters: 8

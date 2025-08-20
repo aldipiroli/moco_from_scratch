@@ -81,7 +81,7 @@ class Trainer(TrainerBase):
             l_pos = torch.bmm(q.unsqueeze(-1).permute(0, 2, 1), k.unsqueeze(-1)).squeeze(
                 -1
             )  # (B, 1, C) x (B, C, 1) -> (B, 1)
-            l_neg = torch.mm(q, k.permute(1, 0))  # (B, C) x (K, C) -> (B, K)
+            l_neg = torch.mm(q, self.k_queue.get_tensor().permute(1, 0))  # (B, C) x (K, C) -> (B, K)
             logits = torch.cat((l_pos, l_neg), -1) / self.temp  # (B, K+1)
 
             labels = torch.zeros(logits.shape[0]).to(self.device)

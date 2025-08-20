@@ -4,7 +4,9 @@ MODEL:
   scale_factor: 4
   disable_bn: true
   moco_queue:
-    max_batches: 4
+    max_batches: 8
+  temperature: 0.07
+  momentum: 0.999
 DATA:
   batch_size: 8
   n_classes: 20

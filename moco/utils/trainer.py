@@ -13,6 +13,8 @@ class MoCoKeyQueue:
         self.q = []
 
     def insert_batch(self, x):
+        assert x.shape[0] == self.batch_size
+
         self.q.extend(x)
         if self.queue_size > self.max_batches:
             self.remove_last_batch()
@@ -25,6 +27,9 @@ class MoCoKeyQueue:
 
     @property
     def queue_size(self):
+        if len(self.q) == 0:
+            return 0
+
         q_tensor = torch.stack(self.q, 0)
         return q_tensor.shape[0] // self.batch_size
 
@@ -40,6 +45,8 @@ class Trainer(TrainerBase):
             max_batches=config["MODEL"]["moco_queue"]["max_batches"],
             batch_size=config["DATA"]["batch_size"],
         )
+        self.temp = config["MODEL"]["temperature"]
+        self.m = config["MODEL"]["momentum"]
 
     def train(self):
         self.logger.info("Started training..")
@@ -63,16 +70,28 @@ class Trainer(TrainerBase):
             x_k = self.moco_augm.augment(x)
 
             # encode
-            q = self.f_q(x_q)
-            k = self.f_k(x_k).detach()
+            q = self.f_q(x_q)  # (B, C)
+            k = self.f_k(x_k).detach()  # (B, C)
 
-            # compute similarity
+            if self.k_queue.queue_size == 0:  # handle first batch
+                self.k_queue.insert_batch(k)
+                continue
 
-            loss_dict = {}
-            loss = 0
+            # compute cos similarity
+            l_pos = torch.bmm(q.unsqueeze(-1).permute(0, 2, 1), k.unsqueeze(-1)).squeeze(
+                -1
+            )  # (B, 1, C) x (B, C, 1) -> (B, 1)
+            l_neg = torch.mm(q, k.permute(1, 0))  # (B, C) x (K, C) -> (B, K)
+            logits = torch.cat((l_pos, l_neg), -1) / self.temp  # (B, K+1)
+
+            labels = torch.zeros(logits.shape[0]).to(self.device)
+            loss, loss_dict = self.loss_fn(logits, labels)
             self.write_dict_to_tb(loss_dict, self.total_iters, prefix="train")
 
             loss.backward()
+            self.update_k_encoder()
+            self.k_queue.insert_batch(k)
+
             self.total_iters += 1
             pbar.set_postfix(
                 {
@@ -87,5 +106,19 @@ class Trainer(TrainerBase):
         self.f_k = copy.deepcopy(self.model)
         self.f_q = copy.deepcopy(self.model)
 
+    def update_k_encoder(self):
+        with torch.no_grad():
+            for k_param, q_param in zip(self.f_k.parameters(), self.f_q.parameters()):
+                k_param = self.m * k_param + ((1 - self.m) * q_param)
+
     def evaluate_model(self):
         return
+
+
+###########################################
+import debugpy
+
+debugpy.listen(("localhost", 6001))
+print("Waiting for debugger attach...")
+debugpy.wait_for_client()
+###########################################

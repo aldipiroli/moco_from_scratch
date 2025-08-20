@@ -7,5 +7,8 @@ class MoCoLoss(nn.Module):
         self.config = config
         self.logger = logger
 
-    def forward(sefl):
-        return
+    def forward(sefl, logits, labels):
+        loss_fn = nn.CrossEntropyLoss()
+        loss = loss_fn(logits, labels)
+        loss_dict = {"contrastive_loss": loss}
+        return loss, loss_dict

@@ -96,11 +96,14 @@ class TrainerBase(ABC):
         self.val_dataset = val_dataset
         self.data_config = data_config
 
-        self.train_loader = DataLoader(self.train_dataset, batch_size=data_config["batch_size"], shuffle=True)
+        self.train_loader = DataLoader(
+            self.train_dataset, batch_size=data_config["batch_size"], shuffle=True, drop_last=True
+        )
         self.val_loader = DataLoader(
             self.val_dataset,
             batch_size=val_set_batch_size if val_set_batch_size is not None else data_config["batch_size"],
             shuffle=shuffle_valset,
+            drop_last=True,
         )
         self.logger.info(f"Train Dataset: {self.train_dataset}")
         self.logger.info(f"Val Dataset: {self.val_dataset}")

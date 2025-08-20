@@ -8,7 +8,7 @@ DATA:
   n_classes: 20
   root_dir: "../data"
   augm:
-    crop_size: 256
+    crop_size: [256, 256]
 OPTIM:
   loss: ""
   optimizer: "AdamW"

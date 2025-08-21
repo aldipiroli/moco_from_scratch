@@ -60,7 +60,9 @@ class Trainer(TrainerBase):
                 self.save_checkpoint()
 
     def train_one_epoch(self):
-        self.model.train()
+        self.f_q.train()
+        self.f_k.eval()
+
         pbar = tqdm(enumerate(self.train_loader), total=len(self.train_loader))
         for n_iter, (x) in pbar:
             x = x.to(self.device)
@@ -104,8 +106,9 @@ class Trainer(TrainerBase):
         pbar.close()
 
     def initialize_encoders(self):
+        self.f_q = self.model
         self.f_k = copy.deepcopy(self.model)
-        self.f_q = copy.deepcopy(self.model)
+        self.f_k.eval()
 
     def update_k_encoder(self):
         with torch.no_grad():

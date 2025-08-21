@@ -84,11 +84,13 @@ class Trainer(TrainerBase):
             l_neg = torch.mm(q, self.k_queue.get_tensor().permute(1, 0))  # (B, C) x (K, C) -> (B, K)
             logits = torch.cat((l_pos, l_neg), -1) / self.temp  # (B, K+1)
 
-            labels = torch.zeros(logits.shape[0]).to(self.device)
+            labels = torch.zeros(logits.shape[0], dtype=torch.long).to(self.device)
             loss, loss_dict = self.loss_fn(logits, labels)
             self.write_dict_to_tb(loss_dict, self.total_iters, prefix="train")
 
+            self.optimizer.zero_grad()
             loss.backward()
+            self.optimizer.step()
             self.update_k_encoder()
             self.k_queue.insert_batch(k)
 
@@ -109,7 +111,7 @@ class Trainer(TrainerBase):
     def update_k_encoder(self):
         with torch.no_grad():
             for k_param, q_param in zip(self.f_k.parameters(), self.f_q.parameters()):
-                k_param = self.m * k_param + ((1 - self.m) * q_param)
+                k_param.data.copy_(self.m * k_param.data + (1 - self.m) * q_param.data)
 
     def evaluate_model(self):
         return

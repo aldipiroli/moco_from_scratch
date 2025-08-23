@@ -48,9 +48,6 @@ def make_artifacts_dirs(cfg, log_datetime=False):
 
     cfg["CKPT_DIR"] = cfg_artifacts / "ckpts"
     os.makedirs(cfg["CKPT_DIR"], exist_ok=True)
-
-    cfg["EMBED_DIR"] = cfg_artifacts / "embeddings"
-    os.makedirs(cfg["EMBED_DIR"], exist_ok=True)
     return cfg
 
 

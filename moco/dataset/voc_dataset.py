@@ -31,4 +31,5 @@ class VOCDataset(Dataset):
     def __getitem__(self, idx):
         img, _ = self.dataset[idx]
         img = self.transform_to_tensor(img)
+        img = self.transform_resize(img)
         return img

@@ -16,6 +16,7 @@ python evaluate.py moco/config/moco_config.yaml path/to/ckpt.pt
 ```
 ### Qualitvative Results
 > Qualitative results of cosine similarity scores for feature embeddings from the VOC dataset validation split, with the model trained for 10 epochs. 
+> 
 ![](assets/teaser.png)
 
 ---

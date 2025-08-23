@@ -1,6 +1,6 @@
 import argparse
 
-from moco.dataset.flowers102_dataset import Flowers102Dataset
+from moco.dataset.voc_dataset import VOCDataset
 from moco.model.moco_loss import MoCoLoss
 from moco.model.resnet import ResNet18Model
 from moco.utils.misc import get_logger, load_config, make_artifacts_dirs
@@ -13,8 +13,8 @@ def train(args):
     logger = get_logger(config["LOG_DIR"])
     trainer = Trainer(config, logger)
 
-    train_dataset = Flowers102Dataset(cfg=config, mode="train")
-    val_dataset = Flowers102Dataset(cfg=config, mode="val")
+    train_dataset = VOCDataset(cfg=config, mode="train")
+    val_dataset = VOCDataset(cfg=config, mode="val")
 
     model = ResNet18Model(config)
     trainer.set_model(model)

@@ -4,9 +4,16 @@ Implementing ["Momentum Contrast for Unsupervised Visual Representation Learning
 ### Clone and install dependencies
 ``` 
 git clone https://github.com/aldipiroli/moco_from_scratch
-pip install -r requirements.txt && cd moco
+pip install -r requirements.txt 
 ``` 
 ### Train 
 ``` 
-python train.py config/moco_config.yaml
+python train.py moco/config/moco_config.yaml
 ```
+### Evaluate 
+``` 
+python evaluate.py moco/config/moco_config.yaml path/to/ckpt.pt
+```
+### Qualitvative Results
+> Qualitative results of cosine similarity scores for feature embeddings from the VOC dataset validation split, with the model trained for 10 epochs. 
+![](assets/teaser.png)

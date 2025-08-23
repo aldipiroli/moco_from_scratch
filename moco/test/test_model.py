@@ -4,8 +4,9 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch
 import torch.nn as nn
-from model.resnet import ResNet18Model, replace_batchnorm_with_identity
-from utils.misc import load_config
+
+from moco.model.resnet import ResNet18Model, replace_batchnorm_with_identity
+from moco.utils.misc import load_config
 
 
 def test_model():

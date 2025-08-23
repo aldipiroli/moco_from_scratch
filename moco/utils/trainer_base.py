@@ -4,7 +4,8 @@ from pathlib import Path
 import torch
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from utils.misc import get_device
+
+from moco.utils.misc import get_device
 
 
 class TrainerBase(ABC):

@@ -2,8 +2,9 @@ import copy
 
 import torch
 from tqdm import tqdm
-from utils.augmentations import MoCoAugmentations
-from utils.trainer_base import TrainerBase
+
+from moco.utils.augmentations import MoCoAugmentations
+from moco.utils.trainer_base import TrainerBase
 
 
 class MoCoKeyQueue:

@@ -1,10 +1,8 @@
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch
-from utils.misc import load_config
-from utils.trainer import MoCoKeyQueue
+
+from moco.utils.misc import load_config
+from moco.utils.trainer import MoCoKeyQueue
 
 
 def test_k_queue_single_batch():

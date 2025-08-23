@@ -1,10 +1,10 @@
 import argparse
 
-from dataset.flowers102_dataset import Flowers102Dataset
-from model.moco_loss import MoCoLoss
-from model.resnet import ResNet18Model
-from utils.misc import get_logger, load_config, make_artifacts_dirs
-from utils.trainer import Trainer
+from moco.dataset.flowers102_dataset import Flowers102Dataset
+from moco.model.moco_loss import MoCoLoss
+from moco.model.resnet import ResNet18Model
+from moco.utils.misc import get_logger, load_config, make_artifacts_dirs
+from moco.utils.trainer import Trainer
 
 
 def train(args):

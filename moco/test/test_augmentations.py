@@ -3,8 +3,9 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch
-from utils.augmentations import MoCoAugmentations
-from utils.misc import load_config
+
+from moco.utils.augmentations import MoCoAugmentations
+from moco.utils.misc import load_config
 
 
 def test_augmentations():

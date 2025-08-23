@@ -117,4 +117,23 @@ class Trainer(TrainerBase):
                 k_param.data.copy_(self.m * k_param.data + (1 - self.m) * q_param.data)
 
     def evaluate_model(self):
-        return
+        self.model.eval()
+        for x in self.val_loader:
+            x = x.to(self.device)
+
+            # Query / Positive
+            a = x[0:1]
+            q = self.moco_augm.augment(a)
+            kp = self.moco_augm.augment(a)
+            embed_q = self.model(q)
+            embed_kp = self.model(kp)
+
+            # Negative
+            b = x[1:2]
+            kn = self.moco_augm.augment(b)
+            embed_kn = self.model(kn)
+
+            # Compute Similarities
+            sim_q_kp = torch.bmm(embed_q.unsqueeze(-1).permute(0, 2, 1), embed_kp.unsqueeze(-1)).squeeze(-1)
+            sim_q_kn = torch.bmm(embed_q.unsqueeze(-1).permute(0, 2, 1), embed_kn.unsqueeze(-1)).squeeze(-1)
+            self.logger.info(f"Cos sim: q*kp {sim_q_kp.item()}, Cos sim: q*kn {sim_q_kn.item()}")
